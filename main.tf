@@ -14,7 +14,26 @@ provider "aws" {
 # provider "random" {
 #   # Configuration options
 # }
-
+data "aws_ami" "latest_ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]  # Canonical account ID for official Ubuntu AMIs
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
 resource "random_password" "token" {
   length  = 16
   special = false
@@ -22,7 +41,7 @@ resource "random_password" "token" {
 }
 
 resource "aws_instance" "master" {
-  ami                    = var.myami
+  ami                    = data.aws_ami.latest_ubuntu.id
   instance_type          = var.instancetype
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.K3S-sec-grp.id]
@@ -33,7 +52,7 @@ tags = {
 }
 
 resource "aws_instance" "worker" {
-  ami                    = var.myami
+  ami                    = data.aws_ami.latest_ubuntu.id
   instance_type          = var.instancetype
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.K3S-sec-grp.id]
