@@ -45,13 +45,13 @@ resource "aws_instance" "worker" {
 }
 
 data "template_file" "master" {
-  template = file("master.sh")
+  template = file("${abspath(path.module)}/master.sh")
   vars = {
   sifre = random_password.token.result
   }
 }
 data "template_file" "worker" {
-  template = file("worker.sh")
+  template = file("${abspath(path.module)}/worker.sh")
   vars = {
   sifre = random_password.token.result
   url = "https://${aws_instance.master.private_ip}:6443" 
