@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 module "k3s-instances" {
-    source = "<github-username>/k3s-instances/aws"
+    source = "halildikilitas01/k3s-instances/aws"
     key_name = "halil" # your key-name here
 }
 ```
