@@ -11,9 +11,9 @@ provider "aws" {
   region = var.region
 }
 
-provider "random" {
-  # Configuration options
-}
+# provider "random" {
+#   # Configuration options
+# }
 
 resource "random_password" "token" {
   length  = 16
